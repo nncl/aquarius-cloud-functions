@@ -2,11 +2,13 @@
  * @description
  * Aquarius Manager App Cloud Functions
  *
- * @author www.github.com/nncl
+ * @author http://www.github.com/nncl
  */
 
 const functions = require('firebase-functions')
-    , admin = require('firebase-admin');
+    , admin = require('firebase-admin')
+    , config = require('./config')
+    , OneSignal = require('./onesignal');
 
 admin.initializeApp(functions.config().firebase);
 
@@ -19,10 +21,24 @@ admin.initializeApp(functions.config().firebase);
  *
  */
 
-exports.addMessage = functions.https.onRequest((req, res) => {
-    const original = req.query.text;
-    admin.database().ref('/messages').push({original: original}).then(snapshot => {
-        res.send('Message saved into database successfully');
-    });
-});
+const addToLog = (message, type) => {
+    admin.database().ref('/logs').push({message: message, type: type});
+};
 
+const sendNotification = (message) => {
+
+    OneSignal.sendNotification(message).then(
+        (res) => {
+            addToLog(res, 'success');
+        }
+        , (err) => {
+            addToLog(err, 'error');
+        }
+    );
+
+};
+
+exports.verifyPH = functions.database.ref('/-KtEei-K13DSQCJfSJKd/ph_atual').onWrite(event => {
+    addToLog(event, 'change');
+    return null;
+});
