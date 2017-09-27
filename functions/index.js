@@ -1,8 +1,28 @@
-const functions = require('firebase-functions');
+/**
+ * @description
+ * Aquarius Manager App Cloud Functions
+ *
+ * @author www.github.com/nncl
+ */
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
+const functions = require('firebase-functions')
+    , admin = require('firebase-admin');
+
+admin.initializeApp(functions.config().firebase);
+
+/**
+ * @description
+ *
+ * Cloud function responsável por disparar Push Notification
+ * quando o PH e Temperatura saem do nível regular especificado
+ * pelo cliente no nosso banco de dados Firebase.
+ *
+ */
+
+exports.addMessage = functions.https.onRequest((req, res) => {
+    const original = req.query.text;
+    admin.database().ref('/messages').push({original: original}).then(snapshot => {
+        res.send('Message saved into database successfully');
+    });
+});
+
