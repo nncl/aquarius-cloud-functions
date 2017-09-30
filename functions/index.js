@@ -45,6 +45,8 @@ exports.verifyPH = functions.database.ref('/-KtEei-K13DSQCJfSJKd/ph_atual').onWr
             , log = 'O valor do PH atual mudou para ' + currentValue;
 
         addToLog(log, 'PH');
+
+        sendNotification(log);
     }
 
     return doStuff();
@@ -58,6 +60,8 @@ exports.verifyTemperature = functions.database.ref('/-KtEei-K13DSQCJfSJKd/temp_a
             , log = 'O valor da Temperatura atual mudou para ' + currentValue;
 
         addToLog(log, 'temperature');
+
+        sendNotification(log);
     }
 
     return doStuff();
