@@ -5,7 +5,7 @@
 
 const OneSignal = require("./onesignal");
 
-OneSignal.sendNotification('Testing bro').then(
+OneSignal.sendNotification('Hi you').then(
     (res) => {
         console.log(res);
     }

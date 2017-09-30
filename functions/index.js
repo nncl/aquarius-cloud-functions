@@ -39,6 +39,27 @@ const sendNotification = (message) => {
 };
 
 exports.verifyPH = functions.database.ref('/-KtEei-K13DSQCJfSJKd/ph_atual').onWrite(event => {
-    addToLog(event, 'change');
-    return null;
+
+    function doStuff() {
+        const currentValue = event.data.val()
+            , log = 'O valor do PH atual mudou para ' + currentValue;
+
+        addToLog(log, 'PH');
+    }
+
+    return doStuff();
+
+});
+
+exports.verifyTemperature = functions.database.ref('/-KtEei-K13DSQCJfSJKd/temp_atual').onWrite(event => {
+
+    function doStuff() {
+        const currentValue = event.data.val()
+            , log = 'O valor da Temperatura atual mudou para ' + currentValue;
+
+        addToLog(log, 'temperature');
+    }
+
+    return doStuff();
+
 });
